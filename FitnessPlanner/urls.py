@@ -20,9 +20,10 @@ from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView, SpectacularRedocView
 
 
+
 urlpatterns = [
     path('admin/', admin.site.urls),
-    #path('api/', include('FitnessPlannerAPI.urls')), 
+    path('api/', include('FitnessPlannerAPI.urls')), 
     # Djoser URLs for user management (registration, login, etc.)
     path('auth/', include('djoser.urls')),
     # JWT token endpoints
