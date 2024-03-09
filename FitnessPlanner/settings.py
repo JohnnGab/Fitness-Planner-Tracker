@@ -140,3 +140,8 @@ DJOSER = {
         'user_create': 'FitnessPlannerAPI.serializers.CustomUserCreateSerializer',
     }
 }
+
+import datetime
+JWT_AUTH = {
+    'JWT_EXPIRATION_DELTA': datetime.timedelta(hours=24),
+}
