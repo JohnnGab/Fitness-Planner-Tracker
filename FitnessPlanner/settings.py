@@ -72,7 +72,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'FitnessPlanner.wsgi.application'
+WSGI_APPLICATION = 'FitnessPlannerAPI.wsgi.application'
 
 
 # Database
