@@ -145,3 +145,13 @@ import datetime
 JWT_AUTH = {
     'JWT_EXPIRATION_DELTA': datetime.timedelta(hours=24),
 }
+
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'Fitness Planner',
+    'VERSION': '1.0.0',
+    
+    # Preprocessing hook to filter out certain paths
+    'PREPROCESSING_HOOKS': [
+        'FitnessPlannerAPI.schema.exclude_djoser_endpoints',
+    ],
+}
