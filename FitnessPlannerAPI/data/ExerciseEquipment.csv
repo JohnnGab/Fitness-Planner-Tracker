@@ -1,0 +1,43 @@
+exercise,equipment,is_optional
+Barbell Bench Press,Barbell,FALSE
+Barbell Bench Press,Bench,FALSE
+Dumbbell Flyes,Dumbbells,FALSE
+Dumbbell Flyes,Bench,FALSE
+Push-Ups,None,FALSE
+Cable Crossover,Cable Machine,FALSE
+Squats,None,TRUE
+Squats,Barbell,TRUE
+Lunges,None,TRUE
+Lunges,Dumbbells,TRUE
+Leg Press,Leg Press Machine,FALSE
+Calf Raises,Dumbbells,TRUE
+Calf Raises,Calf Raise Machine,TRUE
+Pull-Ups,Pull-Up Bar,FALSE
+Deadlifts,Barbell,FALSE
+Bent-Over Rows,Barbell,FALSE
+Lat Pulldowns,Lat Pulldown Machine,FALSE
+Barbell Curl,Barbell,FALSE
+Hammer Curl,Dumbbells,FALSE
+Preacher Curl,Barbell,FALSE
+Preacher Curl,Preacher Bench,FALSE
+Concentration Curl,Dumbbell,FALSE
+Concentration Curl,Bench,FALSE
+Tricep Dips,Parallel Bars,TRUE
+Tricep Dips,Bench,TRUE
+Skull Crushers,Barbell,FALSE
+Skull Crushers,Bench,FALSE
+Tricep Kickbacks,Dumbbell,FALSE
+Close-Grip Bench Press,Barbell,FALSE
+Close-Grip Bench Press,Bench,FALSE
+Military Press,Barbell,FALSE
+Lateral Raise,Dumbbells,FALSE
+Front Raise,Dumbbells,FALSE
+Reverse Flyes,Dumbbells,FALSE
+Plank,None,FALSE
+Crunches,None,FALSE
+Russian Twists,Medicine Ball,FALSE
+Hanging Leg Raises,Pull-Up Bar,FALSE
+Mountain Climbers,None,FALSE
+Burpees,None,FALSE
+High Knees,None,FALSE
+Jump Rope,Jumping Rope,FALSE
