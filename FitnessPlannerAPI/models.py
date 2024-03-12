@@ -32,16 +32,23 @@ class ExerciseEquipment(models.Model):
     class Meta:
         unique_together = (('exercise', 'equipment'),)
 
+class Weekday(models.Model):
+    name = models.CharField(max_length=10, unique=True)
+
+    def __str__(self):
+        return self.name
+
 class WorkoutPlan(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     title = models.CharField(max_length=255)
     goal = models.CharField(max_length=255)
+    weekdays = models.ManyToManyField(Weekday, related_name='workout_plans_days')
 
     def __str__(self):
         return self.title
 
 class WorkoutPlanExercises(models.Model):
-    workout_plan = models.ForeignKey(WorkoutPlan, on_delete=models.CASCADE)
+    workout_plan_day = models.ForeignKey(WorkoutPlan, on_delete=models.CASCADE, null=True)
     exercise = models.ForeignKey(Exercises, on_delete=models.CASCADE)
     sets = models.IntegerField(help_text='Number of sets')
     repetitions = models.IntegerField(null=True, blank=True, help_text='Number of repetitions')
@@ -55,17 +62,5 @@ class WorkoutPlanExercises(models.Model):
         self.full_clean()
         super().save(*args, **kwargs)
 
-class WorkoutPlanDays(models.Model):
-    workout_plan = models.ForeignKey(WorkoutPlan, on_delete=models.CASCADE)
-    day_of_week = models.CharField(max_length=10, choices=[
-        ('Monday', 'Monday'),
-        ('Tuesday', 'Tuesday'),
-        ('Wednesday', 'Wednesday'),
-        ('Thursday', 'Thursday'),
-        ('Friday', 'Friday'),
-        ('Saturday', 'Saturday'),
-        ('Sunday', 'Sunday'),
-    ])
-
     def __str__(self):
-        return f"{self.workout_plan.title} - {self.day_of_week}"
+        return f"{self.workout_plan.title} - {self.weekday.name} - {self.exercise.name}"
