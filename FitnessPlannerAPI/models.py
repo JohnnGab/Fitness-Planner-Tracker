@@ -42,13 +42,22 @@ class WorkoutPlan(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     title = models.CharField(max_length=255)
     goal = models.CharField(max_length=255)
-    weekdays = models.ManyToManyField(Weekday, related_name='workout_plans_days')
 
     def __str__(self):
         return self.title
+    
+class WorkoutPlanWeekdays(models.Model):
+    plan = models.ForeignKey(WorkoutPlan, on_delete=models.CASCADE)
+    weekday = models.ForeignKey(Weekday, on_delete=models.CASCADE)
 
-class WorkoutPlanExercises(models.Model):
-    workout_plan_day = models.ForeignKey(WorkoutPlan, on_delete=models.CASCADE, null=True)
+    class Meta:
+        unique_together = ('plan', 'weekday')
+
+    def __str__(self):
+        return f'{self.plan} on {self.weekday}'
+    
+class WorkoutDayExercises(models.Model):
+    plan_weekday = models.ForeignKey(WorkoutPlanWeekdays, on_delete=models.CASCADE, null=True)
     exercise = models.ForeignKey(Exercises, on_delete=models.CASCADE)
     sets = models.IntegerField(help_text='Number of sets')
     repetitions = models.IntegerField(null=True, blank=True, help_text='Number of repetitions')
@@ -63,4 +72,4 @@ class WorkoutPlanExercises(models.Model):
         super().save(*args, **kwargs)
 
     def __str__(self):
-        return f"{self.workout_plan.title} - {self.weekday.name} - {self.exercise.name}"
+        return f"{self.exercise.name}"
