@@ -2,7 +2,7 @@ from djoser.serializers import UserCreateSerializer
 from django.contrib.auth.password_validation import validate_password
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
-from .models import Equipment, MuscleGroups, Exercises, ExerciseEquipment
+from .models import Equipment, MuscleGroups, Exercises, ExerciseEquipment, Weekday, WorkoutPlan, WorkoutDayExercises
 
 User = get_user_model()
 
@@ -82,3 +82,44 @@ class ExercisesSerializer(serializers.ModelSerializer):
             representation['equipment'] = 'No equipment'
 
         return representation
+    
+class WorkoutDayExercisesSerializer(serializers.ModelSerializer):
+    day = serializers.SlugRelatedField(slug_field='name', queryset=Weekday.objects.all())
+    exercise_id = serializers.IntegerField()
+    exercise_name = serializers.SerializerMethodField(read_only=True)
+
+    class Meta:
+        model = WorkoutDayExercises
+        fields = ['day', 'exercise_id', 'sets', 'exercise_name', 'repetitions', 'duration']
+
+    def get_exercise_name(self, obj):
+        # This method will be called for each instance to get the 'exercise_name' value
+        return obj.exercise.name
+
+class WorkoutPlanSerializer(serializers.ModelSerializer):
+    day_plan = WorkoutDayExercisesSerializer(source='workoutdayexercises_set', many=True)
+
+    class Meta:
+        model = WorkoutPlan
+        fields = ['title', 'goal', 'day_plan']
+
+    def create(self, validated_data):
+        day_plan_data = validated_data.pop('workoutdayexercises_set')
+        
+        workout_plan = WorkoutPlan.objects.create(**validated_data)
+        
+        for day_data in day_plan_data:
+            day = day_data.pop('day')
+            weekday = Weekday.objects.get(name=day)
+            exercise_id = day_data.pop('exercise_id')
+            exercise = Exercises.objects.get(id=exercise_id)
+
+            # Create WorkoutDayExercises instances
+            WorkoutDayExercises.objects.create(
+                workout_plan=workout_plan, 
+                day=weekday, 
+                exercise=exercise, 
+                **day_data
+            )
+
+        return workout_plan

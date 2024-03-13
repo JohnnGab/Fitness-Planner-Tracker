@@ -43,25 +43,22 @@ class WorkoutPlan(models.Model):
     title = models.CharField(max_length=255)
     goal = models.CharField(max_length=255)
 
+    class Meta:
+        unique_together = ('user', 'title')  # Adding unique constraint
+
     def __str__(self):
         return self.title
     
-class WorkoutPlanWeekdays(models.Model):
-    plan = models.ForeignKey(WorkoutPlan, on_delete=models.CASCADE)
-    weekday = models.ForeignKey(Weekday, on_delete=models.CASCADE)
-
-    class Meta:
-        unique_together = ('plan', 'weekday')
-
-    def __str__(self):
-        return f'{self.plan} on {self.weekday}'
-    
 class WorkoutDayExercises(models.Model):
-    plan_weekday = models.ForeignKey(WorkoutPlanWeekdays, on_delete=models.CASCADE, null=True)
+    day = models.ForeignKey(Weekday, on_delete=models.CASCADE, null=True)
+    workout_plan = models.ForeignKey(WorkoutPlan, on_delete=models.CASCADE, null=True)
     exercise = models.ForeignKey(Exercises, on_delete=models.CASCADE)
     sets = models.IntegerField(help_text='Number of sets')
     repetitions = models.IntegerField(null=True, blank=True, help_text='Number of repetitions')
     duration = models.IntegerField(null=True, blank=True, help_text='Duration in seconds')
+
+    class Meta:
+        unique_together = ('day', 'workout_plan', 'exercise')  # Adding unique constraint
 
     def clean(self):
         if self.repetitions is None and self.duration is None:
