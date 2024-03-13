@@ -4,32 +4,39 @@ The Personalized Workout Plan system is designed to for users to create Personal
 
 ## Setup and Deployment
 
-To easily deploy and run the application, you can download the Docker image file and load it into your Docker environment. Follow the steps below:
+## Local Development
 
-### Downloading the Docker Image
+1. **Clone the Project Repository**:
+    - Clone the project repository from the following link:
+        - [Project Repository](https://github.com/JohnnGab/FitnessPlanner.git)
+    - You can use Git to clone the repository with the following command:
+        ```bash
+        git clone https://github.com/JohnnGab/FitnessPlanner.git
+        ```
 
-1. Download the Docker image file from the following link:
-    - [Download Docker Image](https://drive.google.com/drive/folders/1VPkCbyzDSEzE5bobjK5ydepRyzF8KfhZ?usp=drive_link)
+2. **Navigate to the Project Directory**:
+    - Change your working directory to the root directory of the cloned project:
+        ```bash
+        cd FitnessPlanner
+        ```
 
-### Loading the Docker Image
+3. **Building the Docker Image**:
+    - Make sure you have Docker installed on your system.
+    - Run the following command to build the Docker image:
+        ```bash
+        docker build -t fitnessplanner .
+        ```
 
-2. After downloading, load the image into Docker with the following command:
-    ```bash
-    docker load < /path/to/yourprojectname.tar
-    ```
-    Replace `/path/to/yourprojectname.tar` with the actual path to the downloaded Docker image file.
+4. **Running the Docker Container**:
+    - Once the image is built, you can run the Docker container with the following command:
+        ```bash
+        docker run -p 8000:8000 fitnessplanner
+        ```.
+    - This command will start the container and map port `8000` from the container to port `8000` on your host machine.
 
-### Running the Docker Container
-
-3. Run the application by starting a Docker container using the following command:
-    ```bash
-    docker run -p 8000:8000 yourprojectname
-    ```
-    This command maps port 8000 of the container to port 8000 on your host machine, making the application accessible via `http://localhost:8000`.
-
-### Accessing the Application
-
-4. Open your web browser and navigate to `http://127.0.0.1:8000/api/docs/` For Swagger API enpoints and documetnation.
+5. **Accessing the Application**:
+    - After the container is running, you can access your application in a web browser by navigating to `http://localhost:8000`.
+    - Fow testing and Swagger documentation use `http://localhost:8000/api/docs/`. Ex. 'http://127.0.0.1:8000/api/docs/' 
 
 ## API Endpoints for Djoser library
 
