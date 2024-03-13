@@ -1,8 +1,8 @@
 from django.shortcuts import render
 from rest_framework.generics import ListAPIView
 from rest_framework.permissions import IsAuthenticated
-from .models import Exercises, WorkoutPlan, Weekday
-from .serializers import ExercisesSerializer, WorkoutPlanSerializer, WorkoutDayExercises
+from .models import Exercises, WorkoutPlan, Weekday, Goal
+from .serializers import ExercisesSerializer, WorkoutPlanSerializer, WorkoutDayExercises, GoalSerializer
 from rest_framework import viewsets
 from drf_spectacular.utils import extend_schema
 from rest_framework.response import Response
@@ -153,3 +153,59 @@ class WorkoutPlanViewSet(viewsets.ModelViewSet):
     )
     def list(self, request, *args, **kwargs):
         return super().list(request, *args, **kwargs)
+    
+class GoalViewSet(viewsets.ModelViewSet):
+    queryset = Goal.objects.all()
+    serializer_class = GoalSerializer
+
+    @extend_schema(
+            description="Create Goal. Ex. metric : 'Loose weight'",
+            summary="Create Goal"
+     )
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+
+    def perform_create(self, serializer):
+        # Custom logic here, e.g., automatically setting the user
+        serializer.save(user=self.request.user)
+
+    @extend_schema(
+            description="Delete a specific Goal. Provide ID",
+            summary="Delete a WorkoutPlan"
+     )
+    def destroy(self, request, *args, **kwargs):
+        return super().destroy(request, *args, **kwargs)
+    
+    @extend_schema(
+        description="Partially update Goal",
+        summary="Partial update of a Goal"
+    )
+    def partial_update(self, request, *args, **kwargs):
+        return super().partial_update(request, *args, **kwargs)
+    
+    @extend_schema(
+        description="Retrieve details of a specific Goal. Proived ID",
+        summary="Retrieve a Goal"
+    )
+    def retrieve(self, request, *args, **kwargs):
+        return super().retrieve(request, *args, **kwargs)
+    
+    @extend_schema(
+        description="Retrieve a list of all Goals for authenticated user",
+        summary="List all Goals"
+    )
+    def list(self, request, *args, **kwargs):
+        return super().list(request, *args, **kwargs)
+    
+    @extend_schema(
+        description="Update Goal",
+        summary="Update of a Goal"
+     )
+    def update(self, request, *args, **kwargs):
+        return super().update(request, *args, **kwargs)
+    
+    

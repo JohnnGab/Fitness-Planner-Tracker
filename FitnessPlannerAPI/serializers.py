@@ -2,7 +2,7 @@ from djoser.serializers import UserCreateSerializer
 from django.contrib.auth.password_validation import validate_password
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
-from .models import Equipment, MuscleGroups, Exercises, ExerciseEquipment, Weekday, WorkoutPlan, WorkoutDayExercises
+from .models import Equipment, MuscleGroups, Exercises, ExerciseEquipment, Weekday, WorkoutPlan, WorkoutDayExercises, Goal
 from drf_spectacular.utils import extend_schema_field
 
 User = get_user_model()
@@ -125,3 +125,13 @@ class WorkoutPlanSerializer(serializers.ModelSerializer):
             )
 
         return workout_plan
+    
+class GoalSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Goal
+        fields = ['id', 'metric', 'target_value', 'target_date']
+
+        extra_kwargs = {
+            'id': {'read_only': True},  # Example: Make the 'user' field read-only
+        }
