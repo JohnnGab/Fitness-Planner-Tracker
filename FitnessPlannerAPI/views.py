@@ -1,8 +1,8 @@
 from django.shortcuts import render
 from rest_framework.generics import ListAPIView
 from rest_framework.permissions import IsAuthenticated
-from .models import Exercises, WorkoutPlan, Weekday, Goal
-from .serializers import ExercisesSerializer, WorkoutPlanSerializer, WorkoutDayExercises, GoalSerializer
+from .models import Exercises, WorkoutPlan, Weekday, Goal, ProgressLog
+from .serializers import ExercisesSerializer, WorkoutPlanSerializer, WorkoutDayExercises, GoalSerializer, ProgressLogSerializer
 from rest_framework import viewsets
 from drf_spectacular.utils import extend_schema
 from rest_framework.response import Response
@@ -160,7 +160,7 @@ class GoalViewSet(viewsets.ModelViewSet):
 
     @extend_schema(
             description="Create Goal. Ex. metric : 'Loose weight'",
-            summary="Create Goal"
+            summary="Creat Goal"
      )
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
@@ -188,7 +188,7 @@ class GoalViewSet(viewsets.ModelViewSet):
         return super().partial_update(request, *args, **kwargs)
     
     @extend_schema(
-        description="Retrieve details of a specific Goal. Proived ID",
+        description="Retrieve details of a specific Goal. Provide ID",
         summary="Retrieve a Goal"
     )
     def retrieve(self, request, *args, **kwargs):
@@ -207,5 +207,60 @@ class GoalViewSet(viewsets.ModelViewSet):
      )
     def update(self, request, *args, **kwargs):
         return super().update(request, *args, **kwargs)
+
+class ProgressLogViewSet(viewsets.ModelViewSet):
+    queryset = ProgressLog.objects.all()
+    serializer_class = ProgressLogSerializer
+
+    @extend_schema(
+            description="Create Progress Log. Ex. goal = Goal.id",
+            summary="Create Progress Log"
+     )
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+    
+    def perform_create(self, serializer):
+        goal_id = self.request.data.get('goal')
+        goal = Goal.objects.get(id=goal_id)
+        serializer.save(goal=goal) 
+
+    @extend_schema(
+        description="Retrieve a list of all Progress Logs for authenticated user",
+        summary="Retrieve a list of all Progress Logs"
+    )
+    def list(self, request, *args, **kwargs):
+        return super().list(request, *args, **kwargs)
+    
+    @extend_schema(
+        description="Retrieve details of a Progress Log. Provide ID",
+        summary="Retrieve Progress Log"
+    )
+    def retrieve(self, request, *args, **kwargs):
+        return super().retrieve(request, *args, **kwargs)
+    
+    @extend_schema(
+        description="Update Rrogress Log",
+        summary="Update Rrogress Log"
+     )
+    def update(self, request, *args, **kwargs):
+        return super().update(request, *args, **kwargs)
+    
+    @extend_schema(
+        description="Partially update  Rrogress Log",
+        summary="Partial update of a Rrogress Log"
+    )
+    def partial_update(self, request, *args, **kwargs):
+        return super().partial_update(request, *args, **kwargs)
+    
+    @extend_schema(
+            description="Delete a specific Progress Log. Provide ID",
+            summary="Delete Progress Log"
+     )
+    def destroy(self, request, *args, **kwargs):
+        return super().destroy(request, *args, **kwargs)
     
     

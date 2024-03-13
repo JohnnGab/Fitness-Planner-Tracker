@@ -2,8 +2,9 @@ from djoser.serializers import UserCreateSerializer
 from django.contrib.auth.password_validation import validate_password
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
-from .models import Equipment, MuscleGroups, Exercises, ExerciseEquipment, Weekday, WorkoutPlan, WorkoutDayExercises, Goal
+from .models import Equipment, MuscleGroups, Exercises, ExerciseEquipment, Weekday, WorkoutPlan, WorkoutDayExercises, Goal, ProgressLog
 from drf_spectacular.utils import extend_schema_field
+from datetime import date
 
 User = get_user_model()
 
@@ -130,8 +131,20 @@ class GoalSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Goal
-        fields = ['id', 'metric', 'target_value', 'target_date']
+        fields = ['id', 'metric', 'target_value', 'target_date',]
 
         extra_kwargs = {
             'id': {'read_only': True},  # Example: Make the 'user' field read-only
         }
+
+class ProgressLogSerializer(serializers.ModelSerializer):
+    date = serializers.DateField(format='%Y-%m-%d', default=date.today, required=False)
+    goal_metric = serializers.SerializerMethodField(read_only=True)
+
+    class Meta:
+        model = ProgressLog
+        fields = ['id', 'goal', 'date', 'current_value', 'goal_metric']
+    
+    def get_goal_metric(self, obj):
+        # This method is used to get the value of the 'goal_metric' field
+        return obj.goal.metric 

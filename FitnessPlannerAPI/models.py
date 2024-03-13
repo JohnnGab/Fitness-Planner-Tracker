@@ -89,7 +89,7 @@ class ProgressLog(models.Model):
     current_value = models.IntegerField(help_text="Current value for the metric")
 
     class Meta:
-        unique_together = ('goal', 'date')
+        unique_together = ('goal', 'current_value')
 
     def __str__(self):
         return f"{self.goal.type} - {self.date}"
