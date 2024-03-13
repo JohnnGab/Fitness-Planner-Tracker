@@ -70,3 +70,26 @@ class WorkoutDayExercises(models.Model):
 
     def __str__(self):
         return f"{self.exercise.name}"
+    
+class Goal(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    metric = models.CharField(max_length=100, help_text="Running Distance")
+    target_value = models.IntegerField(help_text="Target value for the metric")
+    target_date = models.DateField()
+
+    class Meta:
+        unique_together = ('user', 'metric', 'target_date')
+
+    def __str__(self):
+        return self.type
+
+class ProgressLog(models.Model):
+    goal = models.ForeignKey(Goal, on_delete=models.CASCADE)
+    date = models.DateField()
+    current_value = models.IntegerField(help_text="Current value for the metric")
+
+    class Meta:
+        unique_together = ('goal', 'date')
+
+    def __str__(self):
+        return f"{self.goal.type} - {self.date}"
