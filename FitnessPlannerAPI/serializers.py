@@ -3,6 +3,7 @@ from django.contrib.auth.password_validation import validate_password
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
 from .models import Equipment, MuscleGroups, Exercises, ExerciseEquipment, Weekday, WorkoutPlan, WorkoutDayExercises
+from drf_spectacular.utils import extend_schema_field
 
 User = get_user_model()
 
@@ -98,10 +99,11 @@ class WorkoutDayExercisesSerializer(serializers.ModelSerializer):
 
 class WorkoutPlanSerializer(serializers.ModelSerializer):
     day_plan = WorkoutDayExercisesSerializer(source='workoutdayexercises_set', many=True)
+    id = serializers.ReadOnlyField()
 
     class Meta:
         model = WorkoutPlan
-        fields = ['title', 'goal', 'day_plan']
+        fields = ['id', 'title', 'goal', 'day_plan']
 
     def create(self, validated_data):
         day_plan_data = validated_data.pop('workoutdayexercises_set')
