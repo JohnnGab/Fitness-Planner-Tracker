@@ -93,7 +93,7 @@ class WorkoutDayExercisesSerializer(serializers.ModelSerializer):
     class Meta:
         model = WorkoutDayExercises
         fields = ['day', 'exercise_id', 'sets', 'exercise_name', 'repetitions', 'duration']
-
+    @extend_schema_field(str)
     def get_exercise_name(self, obj):
         # This method will be called for each instance to get the 'exercise_name' value
         return obj.exercise.name
@@ -144,7 +144,7 @@ class ProgressLogSerializer(serializers.ModelSerializer):
     class Meta:
         model = ProgressLog
         fields = ['id', 'goal', 'date', 'current_value', 'goal_metric']
-    
+    @extend_schema_field(str)
     def get_goal_metric(self, obj):
         # This method is used to get the value of the 'goal_metric' field
         return obj.goal.metric 
